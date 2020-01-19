@@ -115,8 +115,8 @@ export function shiftAnimatedStyles (index, animatedValue, carouselProps) {
 // The `elevation` property compensates for that only visually, which is not good enough
 export function stackScrollInterpolator (index, carouselProps) {
     const range = IS_ANDROID ?
-        [1, 0, -1, -2, -3] :
-        [3, 2, 1, 0, -1];
+      [1, 0, -1, -2, -3] :
+      [3, 2, 1, 0, -1];
     const inputRange = getInputRangeFromIndexes(range, index, carouselProps);
     const outputRange = range;
 
@@ -126,10 +126,10 @@ export function stackAnimatedStyles (index, animatedValue, carouselProps, cardOf
     const sizeRef = carouselProps.vertical ? carouselProps.itemHeight : carouselProps.itemWidth;
     const translateProp = carouselProps.vertical ? 'translateY' : 'translateX';
 
-    const card1Scale = 0.9;
-    const card2Scale = 0.8;
+    const card1Scale = 1;
+    const card2Scale = 1;
 
-    cardOffset = !cardOffset && cardOffset !== 0 ? 18 : cardOffset;
+    cardOffset = !cardOffset && cardOffset !== 0 ? 100 : cardOffset;
 
     const getTranslateFromScale = (cardIndex, scale) => {
         const centerFactor = 1 / scale * cardIndex;
@@ -137,17 +137,15 @@ export function stackAnimatedStyles (index, animatedValue, carouselProps, cardOf
         const edgeAlignment = Math.round((sizeRef - (sizeRef * scale)) / 2);
         const offset = Math.round(cardOffset * Math.abs(cardIndex) / scale);
 
-        return IS_ANDROID ?
-            centeredPosition - edgeAlignment - offset :
-            centeredPosition + edgeAlignment + offset;
+        return centeredPosition - edgeAlignment - offset;
     };
 
-    const opacityOutputRange = carouselProps.inactiveSlideOpacity === 1 ? [1, 1, 1, 0] : [1, 0.75, 0.5, 0];
+    const opacityOutputRange = carouselProps.inactiveSlideOpacity === 1 ? [1, 1, 1, 0] : [1, 0];
 
-    return IS_ANDROID ? {
+    return {
         // elevation: carouselProps.data.length - index, // fix zIndex bug visually, but not from a logic point of view
         opacity: animatedValue.interpolate({
-            inputRange: [-3, -2, -1, 0],
+            inputRange: [0, 1],
             outputRange: opacityOutputRange.reverse(),
             extrapolate: 'clamp'
         }),
@@ -159,39 +157,13 @@ export function stackAnimatedStyles (index, animatedValue, carouselProps, cardOf
             })
         }, {
             [translateProp]: animatedValue.interpolate({
-                inputRange: [-3, -2, -1, 0, 1],
+                inputRange: [-1, 0, 1, 2, 3],
                 outputRange: [
                     getTranslateFromScale(-3, card2Scale),
                     getTranslateFromScale(-2, card2Scale),
                     getTranslateFromScale(-1, card1Scale),
                     0,
-                    sizeRef * 0.5
-                ],
-                extrapolate: 'clamp'
-            })
-        }]
-    } : {
-        zIndex: carouselProps.data.length - index,
-        opacity: animatedValue.interpolate({
-            inputRange: [0, 1, 2, 3],
-            outputRange: opacityOutputRange,
-            extrapolate: 'clamp'
-        }),
-        transform: [{
-            scale: animatedValue.interpolate({
-                inputRange: [-1, 0, 1, 2],
-                outputRange: [card1Scale, 1, card1Scale, card2Scale],
-                extrapolate: 'clamp'
-            })
-        }, {
-            [translateProp]: animatedValue.interpolate({
-                inputRange: [-1, 0, 1, 2, 3],
-                outputRange: [
-                    -sizeRef * 0.5,
-                    0,
-                    getTranslateFromScale(1, card1Scale),
-                    getTranslateFromScale(2, card2Scale),
-                    getTranslateFromScale(3, card2Scale)
+                    sizeRef * 0.1
                 ],
                 extrapolate: 'clamp'
             })
@@ -206,8 +178,8 @@ export function stackAnimatedStyles (index, animatedValue, carouselProps, cardOf
 // The `elevation` property compensates for that only visually, which is not good enough
 export function tinderScrollInterpolator (index, carouselProps) {
     const range = IS_ANDROID ?
-        [1, 0, -1, -2, -3] :
-        [3, 2, 1, 0, -1];
+      [1, 0, -1, -2, -3] :
+      [3, 2, 1, 0, -1];
     const inputRange = getInputRangeFromIndexes(range, index, carouselProps);
     const outputRange = range;
 
